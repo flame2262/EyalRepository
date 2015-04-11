@@ -1,0 +1,20 @@
+extends layout
+
+block content
+	h1.
+		Game List
+	ul
+		each game, i in gamelist
+			li
+				p #{i+1}: #{game.playerA} #{game.playerB}
+
+	
+	div(ng-view)
+	
+	//div(ng-controller='getStuff')
+	//	span there are {{numofgames}} games
+		
+	//	form(action='/game',method='post')
+	//		<input type="text" ng-model="yourName" placeholder="Enter a name here">
+	//		input(ng-model='yourName',type='submit',value='Sign Up')
+	//		p {{yourName}}!
