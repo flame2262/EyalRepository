@@ -8,7 +8,19 @@ var bodyParser = require('body-parser');
 // New Code
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/nodetest1');
+//var db = monk('localhost:27017/nodetest1');
+
+
+//MY SQL
+var db      = require('mysql');
+var connection = db.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '1234567'
+});
+
+
+
 
 var x= 8;
 
@@ -48,13 +60,27 @@ app.get('/gem', function(req, res) {
 app.get('/api/posts', 
 			function (req, res) 
 			{
+				connection.connect();
+
+				connection.query('SELECT 25 + 25 AS solution', 
+					function(err, rows, fields) 
+					{
+						if (err) throw err;
+
+						console.log('The solution is: ', rows[0].solution);
+						res.json({coolNumber: rows[0].solution});
+					});
+				
+				connection.end();
+				
+				/*
 				var db = req.db;
 				var collection = db.get('games');
 				collection.find({},{},function(e,docs){
 					console.log(docs);
 					res.json({coolNumber: docs.length});
 					
-				});
+				});*/
 			}
 );
 

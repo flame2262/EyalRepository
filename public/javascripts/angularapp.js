@@ -24,13 +24,13 @@ app.controller("AppCtrl", function($scope,req) {
 		$scope.model = 345345;
 });
 
-app.controller("AppCtrl2", function ($scope, $http, calculateService) {
+app.controller("AppCtrl2", function ($scope, $http) {
 	$scope.quantity = 1;
 	$scope.quantityResult = 0;
 	
 	$scope.calculateQuantity = 	function() 
 		{
-			//console.log("crap@#$");
+			console.log("crap@#$");
 			//$scope.quantityResult = calculateService.calculate();
 			
 			$http.get('/api/posts').
