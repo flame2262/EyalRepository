@@ -4,30 +4,19 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//var mongo = require('mongodb');
+//var monk = require('monk');
 
-// New Code
-var mongo = require('mongodb');
-var monk = require('monk');
-//var db = monk('localhost:27017/nodetest1');
-
-
-//MY SQL
+//MySQL
 var db      = require('mysql');
+//var db = monk('localhost:27017/nodetest1');
 var connection = db.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '1234567'
 });
-
-
-
-
-var x= 8;
-
-//var routes = require('./routes/index');
-//var game = require('./routes/game');
-//var gameapi = require('./routes/gameapi');
-//var users = require('./routes/users');
+connection.connect();
+//*****
 
 var app = express();
 
@@ -46,49 +35,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Make our db accessible to our router
 app.use(function(req,res,next){
     req.db = db;
+	req.connection = connection;
     next();
 });
 
-app.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-app.get('/gem', function(req, res) {
-    res.render('gem', { title: 'Hello, World!' })
-});
-
-app.get('/api/posts', 
-			function (req, res) 
-			{
-				connection.connect();
-
-				connection.query('SELECT 25 + 25 AS solution', 
-					function(err, rows, fields) 
-					{
-						if (err) throw err;
-
-						console.log('The solution is: ', rows[0].solution);
-						res.json({coolNumber: rows[0].solution});
-					});
-				
-				connection.end();
-				
-				/*
-				var db = req.db;
-				var collection = db.get('games');
-				collection.find({},{},function(e,docs){
-					console.log(docs);
-					res.json({coolNumber: docs.length});
-					
-				});*/
-			}
-);
-
-
-//app.use('/', routes);
-//app.use('/users', users);
-//app.use('/game', game);
-//app.use('/gameapi', gameapi);
+//Routing definitions
+var indexroute = require('./routes/index');
+app.use('/', indexroute);
+var api = require('./routes/api');
+app.use('/api', api);
+var gem = require('./routes/gem');
+app.use('/gem', gem);
+//******
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -121,5 +79,24 @@ app.use(function(err, req, res, next) {
   });
 });
 
+/*
+//process.stdin.resume();//so the program will not close instantly
+
+function exitHandler(options, err) {
+	connection.end();
+	if (options.cleanup) console.log('clean');
+    if (err) console.log(err.stack);
+    if (options.exit) process.exit();
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+*/
 
 module.exports = app;

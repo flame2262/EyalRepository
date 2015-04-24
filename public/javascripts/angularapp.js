@@ -30,7 +30,7 @@ app.controller("AppCtrl2", function ($scope, $http) {
 	
 	$scope.calculateQuantity = 	function() 
 		{
-			console.log("crap@#$");
+			//console.log("crap@#$");
 			//$scope.quantityResult = calculateService.calculate();
 			
 			$http.get('/api/posts').
