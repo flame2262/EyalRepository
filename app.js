@@ -4,8 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var debug = require('debug')('nodetest1:server');
+
 //var mongo = require('mongodb');
 //var monk = require('monk');
+
 
 //MySQL
 var db      = require('mysql');
@@ -79,24 +82,94 @@ app.use(function(err, req, res, next) {
   });
 });
 
-/*
-//process.stdin.resume();//so the program will not close instantly
 
-function exitHandler(options, err) {
-	connection.end();
-	if (options.cleanup) console.log('clean');
-    if (err) console.log(err.stack);
-    if (options.exit) process.exit();
+//module.exports = app;
+
+
+// Socket.IO
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+
+// HTTP SERVER stuff
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+
+/**
+ * Create HTTP server.
+ */
+//var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+http.listen(port);
+console.log('Example app listening!');
+http.on('error', onError);
+http.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
 }
 
-//do something when app is closing
-process.on('exit', exitHandler.bind(null,{cleanup:true}));
+/**
+ * Event listener for HTTP server "error" event.
+ */
 
-//catches ctrl+c event
-process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
 
-//catches uncaught exceptions
-process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
-*/
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
 
-module.exports = app;
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = http.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}
+

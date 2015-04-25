@@ -31,8 +31,8 @@ app.controller("AppCtrl2", function ($scope, $http) {
 	$scope.calculateQuantity = 	function() 
 		{
 			//console.log("crap@#$");
-			//$scope.quantityResult = calculateService.calculate();
-			
+			//calculateService.calculate();
+		
 			$http.get('/api/posts').
 				success(function(data, status, headers, config) {
 					console.log(data);
@@ -44,12 +44,12 @@ app.controller("AppCtrl2", function ($scope, $http) {
 });
 
 /*
- app.factory('calculateService', function($http){
+ app.factory('calculateService', function($http , $sc){
 		return {
 		  calculate: function(){
 			$http.get('/api/posts').
 				success(function(data, status, headers, config) {
-					return data;
+					$scope.quantityResult = data;
 				});
 		  }	 
 		}				
