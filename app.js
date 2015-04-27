@@ -90,6 +90,14 @@ app.use(function(err, req, res, next) {
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+io.on('connection', function (socket) 
+{
+	// when the client emits 'new message', this listens and executes
+	socket.on('new message', function (data) 
+	{
+		console.log('Ah!');
+	});
+});
 
 // HTTP SERVER stuff
 /**
