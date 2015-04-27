@@ -1,6 +1,9 @@
-button(ng-click='calculateQuantity()') Refresh
-
-input(type='text' ng-model='quantity')
-
-p There are {{quantityResult}} games
+p
+	input(type='text' ng-model='AddressId' name='AddressId')
+	input(type='text' ng-model='NewPhoneNumber' name='NewPhoneNumber')
+p
+	button(ng-click='GetPhoneForAddress()') Refresh Phone for Address Id
+	button(ng-click='UpdatePhoneForAddress()') Update Phone for Address Id
+p 
+	Phone for address 1: {{phoneForAddress}}
 

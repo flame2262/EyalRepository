@@ -24,19 +24,34 @@ app.controller("AppCtrl", function($scope,req) {
 		$scope.model = 345345;
 });
 
-app.controller("AppCtrl2", function ($scope, $http) {
-	$scope.quantity = 1;
-	$scope.quantityResult = 0;
+app.controller("AppCtrl2", function ($scope, $http, $routeParams, $location) {
+	//$scope.quantity = 1;
+	$scope.phoneForAddress = 0;
 	
-	$scope.calculateQuantity = 	function() 
+	$scope.GetPhoneForAddress = 	function() 
 		{
-			//console.log("crap@#$");
+			console.log("angularapp.js GetPhoneForAddress");
 			//calculateService.calculate();
 		
-			$http.get('/api/posts').
+			$http.get('/api/GetPhoneForAddress/' + $scope.AddressId).
 				success(function(data, status, headers, config) {
-					console.log(data);
-					$scope.quantityResult = data;
+					console.log('angularapp.js GetPhoneForAddress success: ' + data);
+					$scope.phoneForAddress = data;
+				});
+			
+		};
+		
+	$scope.UpdatePhoneForAddress = 	function() 
+		{
+			console.log("angularapp.js UpdatePhoneForAddress. $routeParams.id:" + $scope.AddressId + 
+			", $scope.NewPhoneNumber: " + $scope.NewPhoneNumber);
+					
+			$http.put('/api/UpdatePhoneForAddress/' + $scope.AddressId, {NewPhoneNumber: $scope.NewPhoneNumber}).
+				success(function(data, status, headers, config) {
+					console.log('angularapp.js UpdatePhoneForAddress success: ' + data);
+					//$scope.apartmentIdResult = data;
+					//$location.url('/');
+					$scope.GetPhoneForAddress();
 				});
 			
 		};
